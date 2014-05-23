@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-
-require 'hpricot'
 require 'open-uri'
 require 'nokogiri'
  
