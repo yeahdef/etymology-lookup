@@ -4,22 +4,28 @@ import requests
 import sys
 import argparse
 
-parser = argparse.ArgumentParser(description='Lookup the etymology of a word.')
+parser = argparse.ArgumentParser(description='Lookup who sampled a song.')
 parser.add_argument(
-    'word',
+    'artist',
     type=str,
     nargs='+',
-    help='The word you wish to etymologize.'
+    help='The sampled artist.'
+)
+parser.add_argument(
+    'song',
+    type=str,
+    nargs='+',
+    help='The song.'
 )
 args = parser.parse_args()
 
 def main():
-    if args.word:
-        q = args.word[0]
-        response = requests.get('http://www.etymonline.com/index.php?term={0}'.format(q))
+    if args.song:
+        q = args.song[0]
+        response = requests.get('http://www.whosampled.com/search/?q={0}'.format(q))
         html = response.text
-        soup = BeautifulSoup(html, 'lxml')
-        for worddef in soup.find_all('dt'):
+        soup = BeautifulSoup(html, 'html.parser')
+        for worddef in soup.find_all('a', {'class': 'trackName'}):
             print('')
             print(worddef.get_text().strip())
             print(worddef.find_next_sibling().get_text().strip())
